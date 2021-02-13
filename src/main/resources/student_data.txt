@@ -1,0 +1,40 @@
+[
+{
+  "id" : 11,
+  "firstName" : "Saurabh",
+  "lastName" : "Gupta",
+  "permanent" : false,
+  "address" : {
+    "addressLine" : "Lake Union Hill Way",
+    "city" : "Atlanta",
+    "state" : "GA",
+    "zipCode" : 50005
+  },
+  "phoneNumbers" : [ 2233445566, 3344556677 ],
+  "cities" : [ "Dallas", "San Antonio", "Irving" ],
+  "properties" : {
+    "play" : "Badminton",
+    "interst" : "Math",
+    "age" : "34 years"
+  }
+},
+{
+  "id" : 12,
+  "firstName" : "Gaurav",
+  "lastName" : "Khaira",
+  "permanent" : true,
+  "address" : {
+    "addressLine" : " 5770 Shiloh woods dr",
+    "city" : "Cumming",
+    "state" : "GA",
+    "zipCode" : 50007
+  },
+  "phoneNumbers" : [ 2233445567, 3344556678 ],
+  "cities" : [ "New York", "Austin", "Plano" ],
+  "properties" : {
+    "play" : "Baseball",
+    "interst" : "Science",
+    "age" : "36 years"
+  }
+}
+]
