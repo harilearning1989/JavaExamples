@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class CompletableFutureExample1 {
+    //https://www.concretepage.com/java/java-8/java-completablefuture-thenapply
     public static void main(String[] args) {
         try {
             List<Integer> list = Arrays.asList(5, 9, 14);

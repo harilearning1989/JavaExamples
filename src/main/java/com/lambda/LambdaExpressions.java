@@ -23,6 +23,7 @@ public class LambdaExpressions {
 
     private static void functionInterface() {
         //Function,Predicate,Supplier,Consumer
+        //
         /*Function<String, Integer> strLength = s -> {
             Optional<String> optStr = Optional.ofNullable(s).filter(f -> f.trim().length() > 0);
             return optStr.isPresent() ? optStr.get().length() : 0;
@@ -34,7 +35,9 @@ public class LambdaExpressions {
         /*List<SalesOrder> salesOrders = SalesOrderDemo.getSalesOrderData();
         salesOrders.forEach(f -> System.out.println(f.getRegion()));*/
         List<Countries> countriesList = CountriesDemo.getCountriesDetails();
-        countriesList.forEach(f -> System.out.println(f.getRegion()));
+        countriesList.forEach(f -> {
+            System.out.println(f.getIntRegion().length());
+        });
 
     }
 
