@@ -1,0 +1,23 @@
+Java
+Javascript,AJAX,JQuery,JSP,Servlet,AG-GRID
+Spring Boot
+Oracle(SQL/PLSQL)
+Microservices
+Hibernate/JPA
+Gradle,Maven
+DevOps Git,Jenkins,Docker,Kubernetes,GCP,GKE
+ELK
+Servers  Tomcat9,WildFly15
+Sonar
+Swagger
+JUnit,Mockito
+IntelliJ,Eclipse,STS
+Ajile
+Jira
+MobaXterm,Putty,WinScp,NPP
+==============================
+Spring Boot
+Filters,Interceptors,Environment,SpringIO,Redis,JWT,Security,Feign,RestTemplate,
+Hystrix,Lombok,Jasipt,JUnit,Mockito,JaCoCo,Gradle,Maven,SLF4J,Swagger,SpringBootServletInitializer,
+CommandLineRunner,Devtools,Actuator,AOP,Authentication and Authorization,Mapper,GlobalException,Scheduler,
+API Gateway,ELK,Reading Properties,DataSource,JPA
