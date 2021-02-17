@@ -14,6 +14,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamsExamples {
+
+    /*allMatch  anyMatch  noneMatch collect  concat  distinct()  empty  filter  findAny  findFirst
+    flatMap  flatMapToDouble  flatMapToInt  flatMapToLong  forEach  forEachOrdered
+    generate  iterate  limit  map  mapToDouble  mapToInt  mapToLong  max  min  of  peek  reduce
+    skip sum sorted toArray*/
+
     static List<Integer> regionCodeList = new ArrayList<>();
     static List<String> regionList = new ArrayList<>();
     static List<Countries> countriesList = new ArrayList<>();

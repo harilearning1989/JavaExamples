@@ -21,6 +21,7 @@ public class ForLoopDemo {
     }
 
     private static void inetStreamExamples() {
+        //IntStream  DoubleStream  LongStream
         IntStream.range(1, 10).forEach(System.out::println);
         IntStream.range(1, 10).skip(5).forEach(System.out::println);
         System.out.println(IntStream.range(1, 10).sum());
