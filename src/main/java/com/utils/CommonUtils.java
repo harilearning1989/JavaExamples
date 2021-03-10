@@ -1,5 +1,8 @@
 package com.utils;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 public interface CommonUtils {
 
     public static String getOsName() {
@@ -12,5 +15,9 @@ public interface CommonUtils {
 
     public static boolean isLinux() {
         return getOsName().startsWith("Linux");
+    }
+    public static String readResource(final String fileName, Charset charset) throws IOException {
+        //return Resources.toString(Resources.getResource(fileName), charset);
+        return null;
     }
 }

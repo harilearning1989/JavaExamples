@@ -1,4 +1,4 @@
-package com.github;
+package com.github.dto;
 
 import com.opencsv.bean.CsvBindByName;
 

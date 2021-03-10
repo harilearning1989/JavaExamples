@@ -28,7 +28,6 @@ public class DownloadGitHubFiles {
 
     public static void copyURLToFile(URL url, File file) {
         try {
-            InputStream input = url.openStream();
             if (file.exists()) {
                 if (file.isDirectory())
                     throw new IOException("File '" + file + "' is a directory");
@@ -43,7 +42,7 @@ public class DownloadGitHubFiles {
 
             if (!file.exists()) {
                 FileOutputStream output = new FileOutputStream(file);
-
+                InputStream input = url.openStream();
                 byte[] buffer = new byte[4096];
                 int n = 0;
                 while (-1 != (n = input.read(buffer))) {
