@@ -39,6 +39,7 @@ public class SalesOrderDemo {
 
                 salesOrders.add(salesOrder);
             }
+            System.out.println("=============salesOrders======" + salesOrders.size());
         } catch (SQLException e) {
             e.printStackTrace();
         }

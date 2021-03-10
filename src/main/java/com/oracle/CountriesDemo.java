@@ -31,9 +31,19 @@ public class CountriesDemo {
                 String region = rs.getString("REGION");
                 String subRegion = rs.getString("SUB_REGION");
                 String intRegion = rs.getString("INTERMEDIATE_REGION");
-                int regionCode = Integer.parseInt(rs.getString("REGION_CODE"));
-                int subRegionCode = Integer.parseInt(rs.getString("SUB_REGION_CODE"));
-                int intRegionCode = Integer.parseInt(rs.getString("INTERMEDIATE_REGION_CODE"));
+                int regionCode = 0;
+                if (rs.getString("REGION_CODE") != null) {
+                    regionCode = Integer.parseInt(rs.getString("REGION_CODE"));
+                }
+                int subRegionCode = 0;
+                if (rs.getString("SUB_REGION_CODE") != null) {
+                    subRegionCode = Integer.parseInt(rs.getString("SUB_REGION_CODE"));
+                }
+
+                int intRegionCode = 0;
+                if (rs.getString("INTERMEDIATE_REGION_CODE") != null) {
+                    intRegionCode = Integer.parseInt(rs.getString("INTERMEDIATE_REGION_CODE"));
+                }
 
                 countries.setId(id);
                 countries.setName(name);
