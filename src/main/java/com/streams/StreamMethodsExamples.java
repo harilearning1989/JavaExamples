@@ -1,7 +1,7 @@
 package com.streams;
 
 import com.github.CropInsuranceDTO;
-import com.github.ReadCountries;
+import com.github.ReadGitHubCSVFiles;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.FileNotFoundException;
@@ -12,11 +12,7 @@ import java.util.stream.Collectors;
 public class StreamMethodsExamples {
     //https://stackify.com/streams-guide-java-8/
     public static void main(String[] args) {
-        try {
-            ReadCountries.downloadFile("csv/crop_insurance.csv");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        ReadGitHubCSVFiles.downloadCropInsuranceFile();
         List<CropInsuranceDTO> cropList = getCropDetails();
         System.out.println("Size of the crop===" + cropList.size());
         streamMethodsExamples(cropList);
@@ -119,13 +115,6 @@ public class StreamMethodsExamples {
     }
 
     private static List<CropInsuranceDTO> getCropDetails() {
-        /*List<Country> beans = new CsvToBeanBuilder(new FileReader("D:/DataFiles/Downloaded/csv/crop_insurance.csv"))
-                .withType(Country.class)
-                .build()
-                .parse();
-
-        beans.forEach(c -> System.out.println(c.getCountry()));*/
-
         List<CropInsuranceDTO> listCrop = null;
         try {
             listCrop = new CsvToBeanBuilder(new FileReader("D:/DataFiles/Downloaded/csv/crop_insurance.csv"))

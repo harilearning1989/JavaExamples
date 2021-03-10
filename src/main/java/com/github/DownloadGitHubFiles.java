@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class ReadCountries {
+public class DownloadGitHubFiles {
 
     public static void main(String[] args) throws Exception {
         downloadFile("json/Countries.json");
@@ -23,7 +23,7 @@ public class ReadCountries {
         } else if (CommonUtils.isLinux()) {
             file = new File("D:/DataFiles/Downloaded/" + fileName);
         }
-        ReadCountries.copyURLToFile(url, file);
+        DownloadGitHubFiles.copyURLToFile(url, file);
     }
 
     public static void copyURLToFile(URL url, File file) {
