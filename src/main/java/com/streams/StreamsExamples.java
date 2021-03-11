@@ -230,4 +230,66 @@ public class StreamsExamples {
                 .collect(Collectors.toList());
         System.out.println("filterGetSingleColumnList size is ====" + asiaCountriesList.size() + "===asiaCountriesList===" + asiaCountriesList);
     }
+    
+    private static void groupByFunctions(List<CropInsuranceDTO> cropDetails) {
+        Map<String, List<CropInsuranceDTO>> basedOnMandal = Optional.ofNullable(cropDetails)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(CropInsuranceDTO::getMandalName));
+        Optional.ofNullable(basedOnMandal).orElseGet(Collections::emptyMap)
+                .forEach((k, v) -> {
+                    DoubleSummaryStatistics amountStats = Optional.ofNullable(v)
+                            .orElseGet(Collections::emptyList)
+                            .stream()
+                            .filter(Objects::nonNull)
+                            .mapToDouble((x) -> x.getClaimAmountRs())
+                            .summaryStatistics();
+                    System.out.println(k + "==" + v.size() + "==Max Value==" + amountStats.getMax() + "==Min Value==" + amountStats.getMin());
+                });
+    }
+    private static void mapFunctions(List<CropInsuranceDTO> cropDetails) {
+        List<Double> doubleList = Optional.ofNullable(cropDetails)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
+                .map(CropInsuranceDTO::getClaimAmountRs)
+                .distinct()
+                .collect(Collectors.toList());
+        List<String> distVillages = Optional.ofNullable(cropDetails)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
+                .map(CropInsuranceDTO::getVillageName)
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println(distVillages.size());
+    }
+    public static void aggregateFunctions(List<CropInsuranceDTO> cropDetails) {
+        Optional<CropInsuranceDTO> maxClaimAmount =
+                Optional.ofNullable(cropDetails)
+                        .orElseGet(Collections::emptyList)
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.maxBy(Comparator.comparing(CropInsuranceDTO::getClaimAmountRs)));
+        System.out.println("Maximum Claim Amount:" + (maxClaimAmount.isPresent() ?
+                maxClaimAmount.get().getClaimAmountRs() : "Not Applicable"));
+        Optional<CropInsuranceDTO> minClaimAmount =
+                Optional.ofNullable(cropDetails)
+                        .orElseGet(Collections::emptyList)
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.minBy(Comparator.comparing(CropInsuranceDTO::getClaimAmountRs)));
+        System.out.println("Minimum Claim Amount:" + (minClaimAmount.isPresent() ?
+                minClaimAmount.get().getClaimAmountRs() : "Not Applicable"));
+
+        DoubleSummaryStatistics amountStats = Optional.ofNullable(cropDetails)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
+                .mapToDouble((x) -> x.getClaimAmountRs())
+                .summaryStatistics();
+        System.out.println("Max==" + amountStats.getMax() + "==Min==" + amountStats.getMin() +
+                "==Avg==" + amountStats.getAverage() + "==Sum==" + amountStats.getSum());
+    }
 }
