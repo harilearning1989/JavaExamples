@@ -2,6 +2,7 @@ package com.utils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import com.google.common.io.Resources;
 
 public interface CommonUtils {
 
@@ -16,8 +17,8 @@ public interface CommonUtils {
     public static boolean isLinux() {
         return getOsName().startsWith("Linux");
     }
+
     public static String readResource(final String fileName, Charset charset) throws IOException {
-        //return Resources.toString(Resources.getResource(fileName), charset);
-        return null;
+        return Resources.toString(Resources.getResource(fileName), charset);
     }
 }

@@ -21,7 +21,7 @@ public class ReadCSVFiles {
 
     }
 
-    private static List<CropInsuranceDTO> readCropDetails(String fileAfter) {
+    public static List<CropInsuranceDTO> readCropDetails(String fileAfter) {
         try {
             DownloadGitHubFiles.downloadFile(fileAfter);
         } catch (Exception e) {
