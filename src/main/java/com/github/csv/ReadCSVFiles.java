@@ -1,5 +1,6 @@
-package com.github;
+package com.github.csv;
 
+import com.github.DownloadGitHubFiles;
 import com.github.dto.*;
 import com.opencsv.bean.CsvToBeanBuilder;
 
@@ -184,3 +185,4 @@ public class ReadCSVFiles {
         return listCrop;
     }
 }
+
