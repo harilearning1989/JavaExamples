@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
+import static java.util.Comparator.*;
 
 public class CropParallelStream {
     public static void main(String[] args) {
@@ -44,7 +45,10 @@ public class CropParallelStream {
         //groupByMadalMax10Claims(cropList);
         //groupByMadalMin10Claims(cropList);
         //groupByMadalMaxDist10Claims(cropList);
-        groupByMadalMinDist10Claims(cropList);
+        //groupByMadalMinDist10Claims(cropList);
+        //groupByMandalClaimBetween(cropList);
+        //groupByMandalClaimBetweenDetail(cropList);
+        groupByMandalClaimGreaterThan(cropList);
 
         //getDistinctMandals(cropList);
         //getVillageAndName(cropList);
@@ -55,6 +59,64 @@ public class CropParallelStream {
         //filterAndSortReverse(cropList);
         //filterAndSortIgnoreCase(cropList);
         //filterAndSortNullsLast(cropList);
+    }
+
+    private static void groupByMandalClaimGreaterThan(List<CropInsuranceDTO> cropList) {
+        Map<String, List<CropInsuranceDTO>> groupByTop10 =
+                Optional.ofNullable(cropList)
+                        .orElseGet(Collections::emptyList)
+                        .parallelStream()
+                        .filter(Objects::nonNull)
+                        .filter(f -> f.getMandalName() != null)
+                        .collect(groupingBy(CropInsuranceDTO::getMandalName,
+                                collectingAndThen(toList(), l -> l.parallelStream()
+                                        .sorted(comparing(CropInsuranceDTO::getClaimAmountRs).reversed())
+                                        .filter(f -> f.getClaimAmountRs() >= 50000)
+                                        .collect(toList()))));
+        groupByTop10.forEach((k, v) -> {
+            System.out.println("Key is===" + k);
+            v.forEach(f -> System.out.println(f.getClaimAmountRs()));
+        });
+    }
+
+    private static void groupByMandalClaimBetweenDetail(List<CropInsuranceDTO> cropList) {
+        Map<String, List<VillageAndName>> claimBetweenDetail =
+                Optional.ofNullable(cropList)
+                        .orElseGet(Collections::emptyList)
+                        .parallelStream()
+                        .filter(Objects::nonNull)
+                        .filter(f -> f.getMandalName() != null)
+                        .filter(f -> f.getClaimAmountRs() >= 80000 && f.getClaimAmountRs() <= 100000)
+                        .collect(groupingBy(CropInsuranceDTO::getMandalName,
+                                collectingAndThen(toList(), l -> l.stream()
+                                        .map(m -> {
+                                            VillageAndName vill = new VillageAndName();
+                                            vill.setClaim(m.getClaimAmountRs());
+                                            vill.setName(m.getNameOfTheBeneficiary());
+                                            vill.setVillage(m.getVillageName());
+                                            return vill;
+                                        })
+                                        .sorted(comparing(VillageAndName::getClaim).reversed())
+                                        .collect(toList()))));
+        claimBetweenDetail.forEach((k, v) -> {
+            System.out.println("Mandal is ==" + k);
+            v.forEach(f -> {
+                System.out.println(f.getClaim());
+            });
+        });
+    }
+
+    private static void groupByMandalClaimBetween(List<CropInsuranceDTO> cropList) {
+        Map<String, List<CropInsuranceDTO>> claimBetween = Optional.ofNullable(cropList)
+                .orElseGet(Collections::emptyList)
+                .parallelStream()
+                .filter(Objects::nonNull)
+                .filter(f -> f.getClaimAmountRs() >= 80000 && f.getClaimAmountRs() <= 100000)
+                .collect(groupingBy(CropInsuranceDTO::getMandalName, toList()));
+        claimBetween.forEach((k, v) -> {
+            System.out.println("===Mandal==" + k);
+            v.forEach(f -> System.out.println(f.getClaimAmountRs()));
+        });
     }
 
     private static void groupByMadalMinDist10Claims(List<CropInsuranceDTO> cropList) {
@@ -87,7 +149,7 @@ public class CropParallelStream {
                         .collect(groupingBy(CropInsuranceDTO::getMandalName,
                                 collectingAndThen(toList(), l -> l.stream()
                                         .map(CropInsuranceDTO::getClaimAmountRs)
-                                        .sorted(Comparator.reverseOrder())
+                                        .sorted(reverseOrder())
                                         .distinct()
                                         .limit(10)
                                         .collect(toList()))));
@@ -106,7 +168,7 @@ public class CropParallelStream {
                         .filter(f -> f.getMandalName() != null)
                         .collect(groupingBy(CropInsuranceDTO::getMandalName,
                                 collectingAndThen(toList(), l -> l.stream()
-                                        .sorted(Comparator.comparing(CropInsuranceDTO::getClaimAmountRs))
+                                        .sorted(comparing(CropInsuranceDTO::getClaimAmountRs))
                                         .limit(10).collect(toList()))));
         groupByTop10.forEach((k, v) -> {
             System.out.println("Key is===" + k);
@@ -123,7 +185,7 @@ public class CropParallelStream {
                         .filter(f -> f.getMandalName() != null)
                         .collect(groupingBy(CropInsuranceDTO::getMandalName,
                                 collectingAndThen(toList(), l -> l.stream()
-                                        .sorted(Comparator.comparing(CropInsuranceDTO::getClaimAmountRs).reversed())
+                                        .sorted(comparing(CropInsuranceDTO::getClaimAmountRs).reversed())
                                         .limit(10).collect(toList()))));
         groupByTop10.forEach((k, v) -> {
             System.out.println("Key is===" + k);
@@ -137,7 +199,7 @@ public class CropParallelStream {
                 .parallelStream()
                 .filter(Objects::nonNull)
                 .filter(f -> f.getClaimAmountRs() >= 100000)
-                .sorted(Comparator.comparing(CropInsuranceDTO::getNameOfTheBeneficiary, Comparator.nullsLast(String::compareToIgnoreCase)))
+                .sorted(comparing(CropInsuranceDTO::getNameOfTheBeneficiary, nullsLast(String::compareToIgnoreCase)))
                 .collect(toList());
         cropData.forEach(f -> System.out.println(f.getNameOfTheBeneficiary()));
     }
@@ -148,7 +210,7 @@ public class CropParallelStream {
                 .parallelStream()
                 .filter(Objects::nonNull)
                 .filter(f -> f.getClaimAmountRs() >= 100000)
-                .sorted(Comparator.comparing(CropInsuranceDTO::getNameOfTheBeneficiary, String::compareToIgnoreCase))
+                .sorted(comparing(CropInsuranceDTO::getNameOfTheBeneficiary, String::compareToIgnoreCase))
                 .collect(toList());
         cropData.forEach(f -> System.out.println(f.getNameOfTheBeneficiary()));
     }
@@ -159,7 +221,7 @@ public class CropParallelStream {
                 .parallelStream()
                 .filter(Objects::nonNull)
                 .filter(f -> f.getClaimAmountRs() >= 100000)
-                .sorted(Comparator.comparing(CropInsuranceDTO::getNameOfTheBeneficiary).reversed())
+                .sorted(comparing(CropInsuranceDTO::getNameOfTheBeneficiary).reversed())
                 .collect(toList());
         cropData.forEach(f -> System.out.println(f.getNameOfTheBeneficiary()));
     }
@@ -170,7 +232,7 @@ public class CropParallelStream {
                 .parallelStream()
                 .filter(Objects::nonNull)
                 .filter(f -> f.getClaimAmountRs() >= 100000)
-                .sorted(Comparator.comparing(CropInsuranceDTO::getNameOfTheBeneficiary))
+                .sorted(comparing(CropInsuranceDTO::getNameOfTheBeneficiary))
                 .collect(toList());
         cropData.forEach(f -> System.out.println(f.getNameOfTheBeneficiary()));
     }
@@ -256,7 +318,7 @@ public class CropParallelStream {
                 .filter(Objects::nonNull)
                 .filter(f -> f.getMandalName() != null)
                 .collect(groupingBy(CropInsuranceDTO::getMandalName,
-                        maxBy(Comparator.comparingDouble(CropInsuranceDTO::getClaimAmountRs))));
+                        maxBy(comparingDouble(CropInsuranceDTO::getClaimAmountRs))));
         maxClaimByMandal.forEach((k, v) -> {
             System.out.println(k + "====" + v.get().getClaimAmountRs());
         });
@@ -269,7 +331,7 @@ public class CropParallelStream {
                 .filter(Objects::nonNull)
                 .filter(f -> f.getMandalName() != null)
                 .collect(groupingBy(CropInsuranceDTO::getMandalName,
-                        minBy(Comparator.comparingDouble(CropInsuranceDTO::getClaimAmountRs))));
+                        minBy(comparingDouble(CropInsuranceDTO::getClaimAmountRs))));
         minClaimByMandal.forEach((k, v) -> {
             System.out.println(k + "====" + v.get().getClaimAmountRs());
         });
@@ -292,7 +354,7 @@ public class CropParallelStream {
                 .orElseGet(Collections::emptyList)
                 .parallelStream()
                 .filter(Objects::nonNull)
-                .max(Comparator.comparing(CropInsuranceDTO::getClaimAmountRs))
+                .max(comparing(CropInsuranceDTO::getClaimAmountRs))
                 .orElseThrow(NoSuchElementException::new);
         System.out.println("Maximum CropInsuranceDTO :==" + minClaim);
     }
@@ -302,7 +364,7 @@ public class CropParallelStream {
                 .orElseGet(Collections::emptyList)
                 .parallelStream()
                 .filter(Objects::nonNull)
-                .max(Comparator.comparing(CropInsuranceDTO::getClaimAmountRs))
+                .max(comparing(CropInsuranceDTO::getClaimAmountRs))
                 .orElseThrow(NoSuchElementException::new);
         System.out.println("Maximum CropInsuranceDTO :==" + maxClaim);
     }
@@ -313,8 +375,8 @@ public class CropParallelStream {
                 .parallelStream()
                 .filter(Objects::nonNull)
                 .filter(f -> f.getMandalName() != null)
-                .collect(Collectors.groupingBy(CropInsuranceDTO::getMandalName,
-                        Collectors.summarizingDouble(CropInsuranceDTO::getClaimAmountRs)));
+                .collect(groupingBy(CropInsuranceDTO::getMandalName,
+                        summarizingDouble(CropInsuranceDTO::getClaimAmountRs)));
         byMandalStats.forEach((k, v) -> {
             System.out.println(k + "===" + v.getMax() + "==min==" + v.getMin());
         });
@@ -327,7 +389,7 @@ public class CropParallelStream {
                         .parallelStream()
                         .filter(Objects::nonNull)
                         .filter(f -> f.getMandalName() != null)
-                        .collect(Collectors.groupingBy(CropInsuranceDTO::getMandalName, Collectors.toList()));
+                        .collect(groupingBy(CropInsuranceDTO::getMandalName, toList()));
 
         byMandal.forEach((k, v) -> {
             System.out.println(k + "===" + v.size());
@@ -345,7 +407,7 @@ public class CropParallelStream {
                     }
                     return false;
                 })
-                .collect(Collectors.summarizingDouble(CropInsuranceDTO::getClaimAmountRs));
+                .collect(summarizingDouble(CropInsuranceDTO::getClaimAmountRs));
         System.out.println("DoubleSummaryStatistics:== " + doubleSummaryStatistics);
     }
 
@@ -354,7 +416,7 @@ public class CropParallelStream {
                 .orElseGet(Collections::emptyList)
                 .parallelStream()
                 .filter(Objects::nonNull)
-                .collect(Collectors.summingDouble(CropInsuranceDTO::getClaimAmountRs));
+                .collect(summingDouble(CropInsuranceDTO::getClaimAmountRs));
         System.out.println("Total Claim Amount:==" + total);
     }
 
@@ -363,7 +425,7 @@ public class CropParallelStream {
                 .orElseGet(Collections::emptyList)
                 .parallelStream()
                 .filter(Objects::nonNull)
-                .collect(Collectors.averagingDouble(CropInsuranceDTO::getClaimAmountRs));
+                .collect(averagingDouble(CropInsuranceDTO::getClaimAmountRs));
         System.out.println("Average Amount===" + average);
     }
 
@@ -419,6 +481,15 @@ public class CropParallelStream {
 class VillageAndName {
     private String village;
     private String name;
+    private double claim;
+
+    public double getClaim() {
+        return claim;
+    }
+
+    public void setClaim(double claim) {
+        this.claim = claim;
+    }
 
     public String getVillage() {
         return village;
