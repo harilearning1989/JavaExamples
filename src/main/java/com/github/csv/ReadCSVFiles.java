@@ -6,11 +6,15 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.Comparator.comparingInt;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.maxBy;
 
 public class ReadCSVFiles {
     public static String fileBefore = "D:/DataFiles/Downloaded/";
@@ -56,6 +60,8 @@ public class ReadCSVFiles {
             System.out.println("EmpSize==" + empList.size());
             System.out.println("CountrySize==" + contList.size());
             System.out.println("SalesSize===" + saleList.size());
+            
+            getMaxCropAmount(cropList);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -63,6 +69,16 @@ public class ReadCSVFiles {
         }
         long endTime = System.currentTimeMillis();
         System.out.println("Total Time Taken===" + (endTime - startTime));
+    }
+
+    private static void getMaxCropAmount(List<CropInsuranceDTO> cropList) {
+        Optional<CropInsuranceDTO> emp = Optional.ofNullable(cropList)
+                .orElseGet(Collections::emptyList)
+                .stream()
+                .filter(Objects::nonNull)
+                .sorted(Comparator.comparingDouble(CropInsuranceDTO::getClaimAmountRs).reversed()).findFirst();
+        CropInsuranceDTO dto = emp.get();
+        System.out.println("Maximum Crop=="+dto.getClaimAmountRs());
     }
 
     private static void synchronousMethods() {
