@@ -48,7 +48,9 @@ public class CropParallelStream {
         //groupByMadalMinDist10Claims(cropList);
         //groupByMandalClaimBetween(cropList);
         //groupByMandalClaimBetweenDetail(cropList);
-        groupByMandalClaimGreaterThan(cropList);
+        //groupByMandalClaimGreaterThan(cropList);
+        //17 21
+        groupByVillCount(cropList);
 
         //getDistinctMandals(cropList);
         //getVillageAndName(cropList);
@@ -59,6 +61,16 @@ public class CropParallelStream {
         //filterAndSortReverse(cropList);
         //filterAndSortIgnoreCase(cropList);
         //filterAndSortNullsLast(cropList);
+    }
+
+    private static void groupByVillCount(List<CropInsuranceDTO> cropList) {
+        Map<String, Long> groupByVillCounting = Optional.ofNullable(cropList)
+                .orElseGet(Collections::emptyList)
+                .parallelStream()
+                .filter(Objects::nonNull)
+                .filter(f -> f.getVillageName() != null)
+                .collect(groupingBy(CropInsuranceDTO::getVillageName, counting()));
+        groupByVillCounting.forEach((k, v) -> System.out.println(k + "====" + v));
     }
 
     private static void groupByMandalClaimGreaterThan(List<CropInsuranceDTO> cropList) {
